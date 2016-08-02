@@ -293,6 +293,7 @@ class nova::api(
   $enable_network_quota                 = $::os_service_default,
   $enable_instance_password             = $::os_service_default,
   $password_length                      = $::os_service_default,
+  $install_cinder_client                = true,
   # DEPRECATED PARAMETER
   $conductor_workers                    = undef,
   $ec2_listen_port                      = undef,
@@ -311,8 +312,11 @@ class nova::api(
   include ::nova::deps
   include ::nova::db
   include ::nova::policy
-  include ::cinder::client
   include ::nova::keystone::authtoken
+
+  if $install_cinder_client {
+    include ::cinder::client
+  }
 
   if $osapi_v3 {
     warning('osapi_v3 is deprecated, has no effect and will be removed in a future release.')
